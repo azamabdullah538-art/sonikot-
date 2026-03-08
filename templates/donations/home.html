@@ -1,0 +1,131 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Donations - {{ block.super }}{% endblock %}
+
+{% block extra_head %}
+<style>
+.donation-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+.campaign-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.campaign-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.progress {
+    height: 10px;
+    border-radius: 5px;
+}
+.stats-card {
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+    color: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="donation-hero">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Make a Difference Today</h1>
+        <p class="lead mb-4">Your generosity helps us serve humanity with compassion in Sonikot, Gilgit-Baltistan</p>
+        <a href="{% url 'donations:donate' %}" class="btn btn-light btn-lg me-3">Donate Now</a>
+        <a href="#campaigns" class="btn btn-outline-light btn-lg">View Campaigns</a>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <i class="fas fa-dollar-sign fa-3x mb-3"></i>
+                    <h3 class="display-4 fw-bold">${{ total_raised|floatformat:0 }}</h3>
+                    <p class="mb-0">Total Raised</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h3 class="display-4 fw-bold">{{ total_donors }}</h3>
+                    <p class="mb-0">Generous Donors</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <i class="fas fa-heart fa-3x mb-3"></i>
+                    <h3 class="display-4 fw-bold">{{ campaigns|length }}</h3>
+                    <p class="mb-0">Active Campaigns</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Campaigns Section -->
+<section id="campaigns" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Current Campaigns</h2>
+        <div class="row g-4">
+            {% for campaign in campaigns %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card campaign-card h-100">
+                    {% if campaign.image %}
+                    <img src="{{ campaign.image.url }}" class="card-img-top" alt="{{ campaign.title }}">
+                    {% else %}
+                    <div class="bg-primary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-hand-holding-heart fa-4x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ campaign.title }}</h5>
+                        <p class="card-text">{{ campaign.description|truncatechars:100 }}</p>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>Raised: ${{ campaign.raised_amount|floatformat:0 }}</small>
+                                <small>Goal: ${{ campaign.goal_amount|floatformat:0 }}</small>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {{ campaign.progress_percentage }}%"
+                                     aria-valuenow="{{ campaign.progress_percentage }}"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">{{ campaign.progress_percentage|floatformat:1 }}% Complete</small>
+                        </div>
+                        <a href="{% url 'donations:campaign_detail' campaign.pk %}" class="btn btn-primary me-2">View Details</a>
+                        <a href="{% url 'donations:donate_campaign' campaign.pk %}" class="btn btn-success">Donate</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="lead">No active campaigns at the moment. Check back soon!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Make an Impact?</h2>
+        <p class="lead mb-4">Every contribution, no matter the size, helps us continue our mission of serving humanity.</p>
+        <a href="{% url 'donations:donate' %}" class="btn btn-light btn-lg">Start Donating Today</a>
+    </div>
+</section>
+{% endblock %}

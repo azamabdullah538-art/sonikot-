@@ -1,0 +1,95 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Donation Successful - {{ block.super }}{% endblock %}
+
+{% block extra_head %}
+<style>
+.success-hero {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+.success-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 40px;
+    text-align: center;
+}
+.social-share {
+    margin-top: 30px;
+}
+.social-share a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s ease;
+}
+.social-share a:hover {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Success Hero -->
+<section class="success-hero">
+    <div class="container">
+        <i class="fas fa-check-circle fa-5x mb-4"></i>
+        <h1 class="display-4 fw-bold mb-4">Thank You for Your Generosity!</h1>
+        <p class="lead">Your donation has been successfully processed and will make a real difference in our community.</p>
+    </div>
+</section>
+
+<!-- Success Details -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="success-card">
+                    <h3 class="mb-4">What's Next?</h3>
+                    <div class="row text-start">
+                        <div class="col-md-12 mb-3">
+                            <i class="fas fa-envelope text-primary me-3"></i>
+                            <strong>Receipt Sent:</strong> Check your email for a tax-deductible receipt.
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <i class="fas fa-heart text-danger me-3"></i>
+                            <strong>Impact:</strong> Your donation helps us continue serving humanity in Sonikot.
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <i class="fas fa-users text-success me-3"></i>
+                            <strong>Community:</strong> Join thousands of donors making a difference.
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <p class="mb-4">Share your generosity with others!</p>
+                    <div class="social-share">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" class="bg-primary">
+                            <i class="fab fa-facebook-f me-2"></i>Facebook
+                        </a>
+<a href="https://twitter.com/intent/tweet?text=I just donated to Sonikot Youth Welfear Foundation! Help make a difference: {{ request.build_absolute_uri|urlencode }}" class="bg-info">
+                            <i class="fab fa-twitter me-2"></i>Twitter
+                        </a>
+<a href="https://wa.me/?text=I just donated to Sonikot Youth Welfear Foundation! Help make a difference: {{ request.build_absolute_uri|urlencode }}" class="bg-success">
+                            <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                        </a>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'donations:home' %}" class="btn btn-primary me-3">View More Campaigns</a>
+                        <a href="{% url 'core:home' %}" class="btn btn-outline-primary">Return Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

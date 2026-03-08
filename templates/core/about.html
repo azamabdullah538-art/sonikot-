@@ -1,0 +1,191 @@
+
+{% extends 'includes/base.html' %}
+
+{% block title %}About Us - {{ organization.short_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">About</li>
+                </ol>
+            </nav>
+            <h1 class="display-4">About {{ organization.name }}</h1>
+            <p class="lead">Learn more about our mission, vision, and the work we do in our community.</p>
+        </div>
+    </div>
+
+    <!-- Mission & Vision -->
+    {% if site_settings %}
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-bullseye fa-3x text-primary mb-3"></i>
+                    <h3 class="card-title">Our Mission</h3>
+                    <p class="card-text">{{ site_settings.mission|default:"To serve humanity with compassion and dedication, working towards the betterment of our community through various welfare programs and initiatives." }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-eye fa-3x text-success mb-3"></i>
+                    <h3 class="card-title">Our Vision</h3>
+                    <p class="card-text">{{ site_settings.vision|default:"To create a thriving community where every individual has access to education, healthcare, and opportunities for growth and development." }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organization History -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Our Story</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <p class="lead">{{ organization.name }} was established in {{ organization.established }} with a vision to serve the community of Sonikot, Gilgit-Baltistan, Pakistan.</p>
+                    <p>{{ site_settings.about_text|default:"Since our inception, we have been committed to addressing the needs of our community through comprehensive welfare programs. Our work spans education, healthcare, and social development, ensuring that every member of our community has access to essential services and opportunities for growth." }}</p>
+                    <p>We believe in the power of collective action and community participation. Our programs are designed not just to provide immediate relief, but to create sustainable solutions that empower individuals and strengthen our community as a whole.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://via.placeholder.com/600x400/007bff/ffffff?text=Community+Work" alt="Community Work" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2>Our Core Values</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <i class="fas fa-hand-holding-heart fa-3x text-primary mb-3"></i>
+                <h5>Compassion</h5>
+                <p>We approach every individual with empathy and understanding, recognizing their dignity and worth.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <i class="fas fa-users fa-3x text-success mb-3"></i>
+                <h5>Community</h5>
+                <p>We believe in the strength of community and work collaboratively to achieve shared goals.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <i class="fas fa-balance-scale fa-3x text-warning mb-3"></i>
+                <h5>Integrity</h5>
+                <p>We maintain the highest standards of honesty, transparency, and accountability in all our actions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Our Achievements</h2>
+            <div class="row text-center">
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-primary">{{ organization.established }}</h3>
+                            <p>Year Founded</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-success">500+</h3>
+                            <p>Beneficiaries Served</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-info">10+</h3>
+                            <p>Programs Launched</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-warning">50+</h3>
+                            <p>Volunteers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    {% if testimonials %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">What People Say About Us</h2>
+            <div class="row">
+                {% for testimonial in testimonials %}
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                            </div>
+                            <blockquote class="blockquote">
+                                <p class="mb-3">"{{ testimonial.testimonial }}"</p>
+                            </blockquote>
+                            <div class="d-flex align-items-center">
+                                {% if testimonial.photo %}
+                                    <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.full_name }}" class="rounded-circle me-3" width="50" height="50">
+                                {% else %}
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0">{{ testimonial.full_name }}</h6>
+                                    {% if testimonial.role %}
+                                        <small class="text-muted">{{ testimonial.role }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="bg-primary text-white rounded p-5">
+                <h3 class="mb-3">Join Our Mission</h3>
+                <p class="lead mb-4">Be part of the change. Your support can make a real difference in our community.</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'programs:index' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-hand-holding-heart me-2"></i>Support Our Programs
+                    </a>
+                    <a href="{% url 'core:contact' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Get in Touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

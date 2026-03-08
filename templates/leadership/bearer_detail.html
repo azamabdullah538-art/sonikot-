@@ -1,0 +1,115 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}{{ bearer.full_name }} - {{ organization.short_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'leadership:index' %}">Leadership</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ bearer.full_name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    {% if bearer.photo %}
+                        <img src="{{ bearer.photo.url }}" alt="{{ bearer.full_name }}" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-4x text-white"></i>
+                        </div>
+                    {% endif %}
+                    <h3 class="card-title">{{ bearer.full_name }}</h3>
+                    <h5 class="text-primary">{{ bearer.post.title }}</h5>
+                    {% if bearer.term_start %}
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        {% if bearer.term_end %}
+                            {{ bearer.term_start|date:"M Y" }} - {{ bearer.term_end|date:"M Y" }}
+                        {% else %}
+                            Since {{ bearer.term_start|date:"M Y" }}
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">About {{ bearer.full_name }}</h2>
+
+                    {% if bearer.bio %}
+                    <div class="mb-4">
+                        <h5>Biography</h5>
+                        <p>{{ bearer.bio }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Position Details</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Position:</strong> {{ bearer.post.title }}</li>
+                                <li><strong>Priority:</strong> {{ bearer.post.get_priority_display }}</li>
+                                {% if bearer.post.description %}
+                                <li><strong>Description:</strong> {{ bearer.post.description }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Term Information</h5>
+                            <ul class="list-unstyled">
+                                {% if bearer.term_start %}
+                                <li><strong>Started:</strong> {{ bearer.term_start|date:"F j, Y" }}</li>
+                                {% endif %}
+                                {% if bearer.term_end %}
+                                <li><strong>Ended:</strong> {{ bearer.term_end|date:"F j, Y" }}</li>
+                                {% else %}
+                                <li><strong>Status:</strong> <span class="badge bg-success">Current</span></li>
+                                {% endif %}
+                                {% if bearer.status == 'former' %}
+                                <li><strong>Status:</strong> <span class="badge bg-secondary">Former</span></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if bearer.achievements %}
+                    <div class="mb-4">
+                        <h5>Achievements</h5>
+                        <p>{{ bearer.achievements }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if bearer.contact_info %}
+                    <div class="mb-4">
+                        <h5>Contact Information</h5>
+                        <p>{{ bearer.contact_info }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="mt-4">
+                <a href="{% url 'leadership:index' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Leadership Team
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

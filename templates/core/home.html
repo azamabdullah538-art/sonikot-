@@ -1,0 +1,241 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Home - {{ organization.short_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">Welcome to {{ organization.name }}</h1>
+                <p class="lead mb-4">{{ organization.tagline }}</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'programs:index' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-hand-holding-heart me-2"></i>Our Programs
+                    </a>
+                    <a href="#about" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <img src="https://via.placeholder.com/400x400/ffffff/007bff?text={{ organization.short_name }}" alt="{{ organization.name }}" class="img-fluid rounded-circle shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5 bg-light" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4">About Our Organization</h2>
+                <p class="lead">{{ organization.name }} is dedicated to serving humanity with compassion in Sonikot, Gilgit-Baltistan, Pakistan.</p>
+                <p>Established in {{ organization.established }}, we work towards the betterment of our community through various programs and initiatives focused on education, healthcare, and social welfare.</p>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h3 class="text-primary">{{ organization.established }}</h3>
+                            <p>Founded</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h3 class="text-primary">100+</h3>
+                            <p>Beneficiaries</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'core:about' %}" class="btn btn-primary mt-3">Read More About Us</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/600x400/007bff/ffffff?text=Community+Service" alt="Community Service" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Programs Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-5 fw-bold">Our Programs</h2>
+                <p class="lead">Explore our various initiatives and programs designed to help the community.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Education</h5>
+                        <p class="card-text">Supporting education through scholarships, school supplies, and learning programs.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">Healthcare</h5>
+                        <p class="card-text">Providing medical assistance, health awareness, and emergency support.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Community Support</h5>
+                        <p class="card-text">Building stronger communities through social welfare and development programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'programs:index' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-right me-2"></i>View All Programs
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-5 fw-bold">What People Say</h2>
+                <p class="lead">Hear from our community members and beneficiaries.</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% for i in "12345" %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                            <blockquote class="blockquote">
+                                <p class="mb-3">"{{ testimonial.testimonial }}"</p>
+                            </blockquote>
+                            <div class="d-flex align-items-center">
+                                {% if testimonial.photo %}
+                                    <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.full_name }}" class="rounded-circle me-3" width="50" height="50">
+                                {% else %}
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0">{{ testimonial.full_name }}</h6>
+                                    {% if testimonial.role %}
+                                        <small class="text-muted">{{ testimonial.role }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Gallery Preview Section -->
+{% if gallery_images %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-5 fw-bold">Our Impact</h2>
+                <p class="lead">See the difference we're making in our community.</p>
+            </div>
+        </div>
+        <div class="row g-3">
+            {% for image in gallery_images %}
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="gallery-item">
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}" class="img-fluid rounded shadow-sm" style="width: 100%; height: 150px; object-fit: cover;">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'core:gallery' %}" class="btn btn-outline-primary">
+                <i class="fas fa-images me-2"></i>View Full Gallery
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Leadership Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-5 fw-bold">Meet Our Leadership</h2>
+                <p class="lead">Our dedicated team works tirelessly to serve the community and achieve our mission.</p>
+            </div>
+        </div>
+        {% if leaders %}
+        <div class="row">
+            {% for leader in leaders %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card bg-white text-dark h-100 border-0 shadow">
+                    <div class="card-body text-center">
+                        {% if leader.photo %}
+<img src="{{ leader.photo.url }}" alt="{{ leader.full_name }}" class="rounded-circle mb-3" width="100" height="100" style="object-fit: cover; object-position: center;">
+                        {% else %}
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px;">
+                                <i class="fas fa-user text-white fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        <h5 class="card-title">{{ leader.full_name }}</h5>
+                        <p class="card-text text-muted">{{ leader.post.title }}</p>
+                        {% if leader.term_start %}
+                            <small class="text-muted">Since {{ leader.term_start|date:"M Y" }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="text-center mt-4">
+            <a href="{% url 'leadership:index' %}" class="btn btn-light btn-lg">
+                <i class="fas fa-users me-2"></i>View All Members
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-3">Get Involved</h2>
+        <p class="lead mb-4">Join us in making a difference in our community. Your support can change lives.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'core:contact' %}" class="btn btn-primary btn-lg w-100">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="#donate" class="btn btn-success btn-lg w-100">
+                    <i class="fas fa-hand-holding-heart me-2"></i>Donate
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

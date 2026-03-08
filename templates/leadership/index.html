@@ -1,0 +1,114 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Leadership - {{ organization.short_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Leadership</li>
+                </ol>
+            </nav>
+            <h1 class="display-4">Our Leadership Team</h1>
+            <p class="lead">Meet the dedicated individuals leading {{ organization.name }} towards its mission.</p>
+        </div>
+    </div>
+
+    <!-- Current Office Bearers -->
+    {% if current_bearers %}
+        <div class="row">
+            {% for bearer in current_bearers %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if bearer.photo %}
+                        <img src="{{ bearer.photo.url }}" class="card-img-top" alt="{{ bearer.full_name }}" style="height: 300px; width: 100%; object-fit: cover; object-position: center;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <i class="fas fa-user-circle fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bearer.full_name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-primary">{{ bearer.post.title }}</h6>
+                        {% if bearer.term_start %}
+                        <p class="card-text small text-muted">
+                            <i class="fas fa-calendar-alt"></i>
+                            {% if bearer.term_end %}
+                                {{ bearer.term_start|date:"M Y" }} - {{ bearer.term_end|date:"M Y" }}
+                            {% else %}
+                                Since {{ bearer.term_start|date:"M Y" }}
+                            {% endif %}
+                        </p>
+                        {% endif %}
+                        {% if bearer.bio %}
+                        <p class="card-text">{{ bearer.bio|truncatechars:100 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'leadership:bearer_detail' bearer.slug %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-info-circle"></i> View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Leadership information will be updated soon. Please check back later.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Leadership History Section -->
+    {% if current_bearers %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Leadership Structure</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Current Holder</th>
+                            <th>Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                        {% for bearer in current_bearers %}
+                        {% if bearer.post == post %}
+                        <tr>
+                            <td><strong>{{ post.title }}</strong></td>
+                            <td>{{ bearer.full_name }}</td>
+                            <td>
+                                {% if bearer.term_start %}
+                                    {% if bearer.term_end %}
+                                        {{ bearer.term_start|date:"M Y" }} - {{ bearer.term_end|date:"M Y" }}
+                                    {% else %}
+                                        Since {{ bearer.term_start|date:"M Y" }}
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

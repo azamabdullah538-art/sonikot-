@@ -1,0 +1,112 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Gallery - {{ organization.short_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                </ol>
+            </nav>
+            <h1 class="display-4">Our Gallery</h1>
+            <p class="lead">Explore our work and impact through images from our programs and activities.</p>
+        </div>
+    </div>
+
+    {% if categories %}
+        {% for category in categories %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="mb-4">
+                    {% if category.icon %}
+                        <i class="{{ category.icon }}"></i>
+                    {% endif %}
+                    {{ category.name }}
+                </h2>
+                {% if category.description %}
+                    <p class="text-muted">{{ category.description }}</p>
+                {% endif %}
+            </div>
+
+            {% for image in category.images.all %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="gallery-item">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="position-relative overflow-hidden">
+<img src="{{ image.image.url }}" alt="{{ image.title }}" class="card-img-top gallery-image" style="height: 250px; width: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                            <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0" style="background: rgba(0,123,255,0.8); transition: opacity 0.3s ease;">
+                                <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#imageModal{{ image.id }}">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">{{ image.title }}</h6>
+                            {% if image.description %}
+                                <p class="card-text small text-muted">{{ image.description|truncatechars:80 }}</p>
+                            {% endif %}
+                            {% if image.date_taken %}
+                                <small class="text-muted">{{ image.date_taken|date:"M Y" }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for each image -->
+            <div class="modal fade" id="imageModal{{ image.id }}" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ image.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img src="{{ image.image.url }}" alt="{{ image.title }}" class="img-fluid">
+                            {% if image.description %}
+                                <p class="mt-3">{{ image.description }}</p>
+                            {% endif %}
+                            {% if image.date_taken %}
+                                <small class="text-muted">Taken: {{ image.date_taken|date:"F j, Y" }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No images available in this category yet.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h4>No Gallery Images</h4>
+                    <p>We're working on adding photos from our programs and activities. Check back soon!</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.gallery-image:hover {
+    transform: scale(1.05);
+}
+
+.gallery-overlay:hover {
+    opacity: 1 !important;
+}
+</style>
+{% endblock %}

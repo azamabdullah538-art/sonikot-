@@ -1,190 +1,82 @@
 {% extends 'includes/base.html' %}
 
-{% block title %}{{ program.title }} - Programs - Sonikot Youth Welfear Foundation{% endblock %}
+{% block title %}{{ program.title }} - {{ organization.short_name }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'programs:index' %}">Programs</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ program.title }}</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'programs:index' %}">Programs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ program.title }}</li>
+        </ol>
+    </nav>
 
     <div class="row">
         <div class="col-lg-8">
-            <!-- Program Header -->
-            <div class="card mb-4">
-                {% if program.featured_image %}
-                    <img src="{{ program.featured_image.url }}" class="card-img-top" alt="{{ program.title }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/800x400/007bff/ffffff?text={{ program.title|truncatechars:30 }}" class="card-img-top" alt="{{ program.title }}">
-                {% endif %}
-                <div class="card-body">
-                    <h1 class="card-title">{{ program.title }}</h1>
-                    <p class="card-text lead">{{ program.short_description }}</p>
-                    <div class="mb-3">
-                        <span class="badge bg-primary">{{ program.category.name }}</span>
-                        <span class="badge bg-secondary">{{ program.status|title }}</span>
-                        {% if program.is_featured %}
-                            <span class="badge bg-warning">Featured</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Program Details -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Program Details</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Status</h5>
-                            <p>{{ program.get_status_display }}</p>
-                        </div>
-                        {% if program.start_date %}
-                        <div class="col-md-6">
-                            <h5>Start Date</h5>
-                            <p>{{ program.start_date|date:"F j, Y" }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.end_date %}
-                        <div class="col-md-6">
-                            <h5>End Date</h5>
-                            <p>{{ program.end_date|date:"F j, Y" }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.location %}
-                        <div class="col-md-6">
-                            <h5>Location</h5>
-                            <p>{{ program.location }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.estimated_budget %}
-                        <div class="col-md-6">
-                            <h5>Estimated Budget</h5>
-                            <p>PKR {{ program.estimated_budget|floatformat:0 }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.actual_cost %}
-                        <div class="col-md-6">
-                            <h5>Actual Cost</h5>
-                            <p>PKR {{ program.actual_cost|floatformat:0 }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.target_beneficiaries %}
-                        <div class="col-md-6">
-                            <h5>Target Beneficiaries</h5>
-                            <p>{{ program.target_beneficiaries }}</p>
-                        </div>
-                        {% endif %}
-                        {% if program.actual_beneficiaries %}
-                        <div class="col-md-6">
-                            <h5>Actual Beneficiaries</h5>
-                            <p>{{ program.actual_beneficiaries }}</p>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Description -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>About This Program</h3>
-                </div>
-                <div class="card-body">
-                    <p>{{ program.detailed_description|linebreaks }}</p>
-                    {% if program.objectives %}
-                    <h5>Objectives</h5>
-                    <p>{{ program.objectives|linebreaks }}</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Program Images -->
-            {% if program.images.all %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Program Gallery</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        {% for image in program.images.all %}
-                        <div class="col-md-4 mb-3">
-                            <img src="{{ image.image.url }}" class="img-fluid rounded" alt="{{ image.caption|default:program.title }}">
-                            {% if image.caption %}
-                            <p class="text-center mt-2">{{ image.caption }}</p>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+            <!-- Program Image -->
+            {% if program.featured_image %}
+            <img src="{{ program.featured_image.url }}" alt="{{ program.title }}" class="img-fluid rounded shadow mb-4" style="width: 100%; max-height: 400px; object-fit: cover;">
+            {% else %}
+            <div class="bg-primary rounded shadow d-flex align-items-center justify-content-center mb-4" style="width: 100%; height: 300px;">
+                <i class="fas fa-hands-helping fa-5x text-white"></i>
             </div>
             {% endif %}
 
-            <!-- Program Updates -->
-            {% if program.updates.all %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Program Updates</h3>
-                </div>
-                <div class="card-body">
-                    {% for update in program.updates.all %}
-                    <div class="mb-4">
-                        <h5>{{ update.title }}</h5>
-                        <p class="text-muted">{{ update.update_date|date:"F j, Y" }}</p>
-                        <p>{{ update.description|linebreaks }}</p>
-                        {% if update.image %}
-                        <img src="{{ update.image.url }}" class="img-fluid rounded mb-3" alt="{{ update.title }}">
-                        {% endif %}
-                        <hr>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
+            <h1 class="mb-3">{{ program.title }}</h1>
+            
+            {% if program.category %}
+            <span class="badge bg-{{ program.category.color|default:'primary' }} mb-3">{{ program.category.name }}</span>
             {% endif %}
-        </div>
+
+            <div class="program-description">
+                {{ program.description|safe }}
+            </div>
 
         <div class="col-lg-4">
-            <!-- Related Programs -->
-            {% if related_programs %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Related Programs</h4>
-                </div>
+            <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
-                    {% for related in related_programs %}
-                    <div class="mb-3">
-                        <h6><a href="{% url 'programs:program_detail' related.slug %}">{{ related.title }}</a></h6>
-                        <p class="small text-muted">{{ related.short_description }}</p>
-                    </div>
-                    {% endfor %}
+                    <h5 class="card-title">Program Details</h5>
+                    <ul class="list-unstyled">
+                        {% if program.start_date %}
+                        <li class="mb-2">
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            <strong>Start Date:</strong> {{ program.start_date|date:"F d, Y" }}
+                        </li>
+                        {% endif %}
+                        {% if program.end_date %}
+                        <li class="mb-2">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                            <strong>End Date:</strong> {{ program.end_date|date:"F d, Y" }}
+                        </li>
+                        {% endif %}
+                        {% if program.budget %}
+                        <li class="mb-2">
+                            <i class="fas fa-dollar-sign text-primary me-2"></i>
+                            <strong>Budget:</strong> {{ program.budget }}
+                        </li>
+                        {% endif %}
+                        {% if program.target_beneficiaries %}
+                        <li class="mb-2">
+                            <i class="fas fa-users text-primary me-2"></i>
+                            <strong>Target Beneficiaries:</strong> {{ program.target_beneficiaries }}
+                        </li>
+                        {% endif %}
+                    </ul>
                 </div>
-            </div>
-            {% endif %}
 
-            <!-- Contact Information -->
-            <div class="card">
-                <div class="card-header">
-                    <h4>Get Involved</h4>
-                </div>
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <p>Interested in supporting this program?</p>
-                    <a href="mailto:{{ organization.email }}" class="btn btn-primary btn-sm">Contact Us</a>
-                    {% if organization.whatsapp_number %}
-                    <a href="https://wa.me/{{ organization.whatsapp_number|slice:'1:' }}" class="btn btn-success btn-sm ms-2">WhatsApp</a>
-                    {% endif %}
+                    <h5 class="card-title">Get Involved</h5>
+                    <p class="card-text">Support this program and make a difference.</p>
+                    <a href="{% url 'core:contact' %}" class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="#donate" class="btn btn-success w-100">
+                        <i class="fas fa-hand-holding-heart me-2"></i>Donate
+                    </a>
                 </div>
-            </div>
         </div>
-    </div>
 </div>
 {% endblock %}
